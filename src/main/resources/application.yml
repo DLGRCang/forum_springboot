@@ -1,0 +1,96 @@
+server:
+  port: 8888
+  url: http://127.0.0.1:8888/forum
+  system-title: 论坛系统
+  system-sub-title: 论坛系统
+  servlet:
+    context-path: /forum
+  tomcat:
+    threads:
+      max: 400
+    max-connection: 1000
+# Socket配置
+#socket:
+#  # 监听端口 2323
+#  port: 2323
+#  # 线程池 - 保持线程数 20
+#  pool-keep: 20
+#  # 线程池 - 核心线程数 10
+#  pool-core: 10
+#  # 线程池 - 最大线程数 20
+#  pool-max: 30
+#  # 线程队列容量 10
+#  pool-queue-init: 10
+
+spring:
+  login-url: /oauth/login
+  login-failure: /oauth/login?error
+  login-process: /userlogin
+  assets-matchers: /assets/**
+  access-control:
+    role-permission: false
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    cache: false
+  main:
+    allow-bean-definition-overriding: true
+  servlet:
+    multipart:
+      max-file-size: 1GB
+      max-request-size: 1GB
+  datasource:
+    druid:
+      url: jdbc:mysql://172.16.20.68:3306/db_forum?useUnicode=true&characterEncoding=utf8&characterSetResults=utf8&autoReconnect=true&failOverReadOnly=false&useSSL=false&serverTimezone=UTC&nullCatalogMeansCurrent=true
+      db-type: mysql
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: 123456
+      initial-size: 2
+      min-idle: 2
+      max-active: 5
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 10
+      filter:
+        commons-log:
+          connection-logger-name: stat,wall,log4j
+        stat:
+          log-slow-sql: true
+          slow-sql-millis: 2000
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      use-global-data-source-stat: true
+access-control:
+  role-permission: false
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapper-locations: classpath*:mybatis/mapper/**/*.xml
+
+swagger:
+  base-package-list: ink.wgink,com.cm
+
+file:
+  upload-path: /Users/wanggeng/Desktop/UploadFiles/
+  image-types: png,jpg,jpeg,gif,blob
+  video-types: mp4,rmvb
+  audio-types: mp3,wmv,amr
+  file-types: doc,docx,xls,xlsx,ppt,pptx,txt,zip,rar,apk,pdf
+  max-file-count: 6
+  image-output-quality: 0.4
+logging:
+  # enable-api-log: true
+  file:
+    name: D:/project/logs/forum-logs.log
+  level:
+    root: error
+    org.springframework.data.mongodb: debug
+    org.springframework.boot.autoconfigure.security.servlet: debug
+    ink.wgink: debug

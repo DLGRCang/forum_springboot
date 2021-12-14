@@ -1,0 +1,248 @@
+html, body, #LAY_app {
+    height: 100%;
+}
+
+.layui-layout-body {
+    overflow: auto;
+}
+
+#LAY-user-login,
+.layadmin-user-display-show {
+    display: block !important;
+}
+
+.layadmin-user-login {
+    position: relative;
+    left: 0;
+    top: 0;
+    padding: 110px 0;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.layadmin-user-login-main {
+    width: 375px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.layadmin-user-login-box {
+    padding: 20px 20px 0 20px;
+}
+
+.layadmin-user-login-header {
+    text-align: center;
+}
+
+.layadmin-user-login-header h2 {
+    margin-bottom: 10px;
+    font-weight: bold;
+    font-size: 30px;
+    color: #000;
+}
+
+.layadmin-user-login-header p {
+    font-weight: 300;
+    font-size: 20px;
+    color: #000;
+}
+
+.layadmin-user-login-body .layui-form-item {
+    position: relative;
+}
+
+.layadmin-user-login-icon {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 38px;
+    line-height: 36px;
+    text-align: center;
+    color: #d2d2d2;
+}
+
+.layadmin-user-login-body .layui-form-item .layui-input {
+    padding-left: 38px;
+}
+
+.layadmin-user-login-codeimg {
+    max-height: 38px;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.layadmin-user-login-other {
+    position: relative;
+    font-size: 0;
+    line-height: 38px;
+    padding-top: 20px;
+}
+
+.layadmin-user-login-other > * {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.layadmin-user-login-other .layui-icon {
+    position: relative;
+    top: 2px;
+    font-size: 26px;
+}
+
+.layadmin-user-login-other a:hover {
+    opacity: 0.8;
+}
+
+.layadmin-user-jump-change {
+    float: right;
+}
+
+.layadmin-user-login-footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    line-height: 30px;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+    color: rgba(0, 0, 0, .5)
+}
+
+.footer-text {
+    text-shadow: 1px 1px 1px #fff, -1px -1px 1px #fff, 1px -1px 1px #fff, -1px 1px 1px #fff;
+    font-weight: bold;
+}
+
+.layadmin-user-login-footer span {
+    padding: 0 5px;
+}
+
+.layadmin-user-login-footer a {
+    padding: 0 5px;
+    color: rgba(0, 0, 0, .5);
+}
+
+.layadmin-user-login-footer a:hover {
+    color: rgba(0, 0, 0, 1);
+}
+
+/* 有背景图时 */
+.layadmin-user-login-main[bgimg] {
+    background-color: #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 主题背景 */
+.ladmin-user-login-theme {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.ladmin-user-login-theme ul {
+    display: inline-block;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.ladmin-user-login-theme ul li {
+    display: inline-block;
+    vertical-align: top;
+    width: 64px;
+    height: 43px;
+    cursor: pointer;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    background-color: #f2f2f2;
+}
+
+.ladmin-user-login-theme ul li:hover {
+    opacity: 0.9
+}
+
+.layadmin-user-login-main {
+    border-radius: 5px;
+    position: absolute;
+    width: 375px;
+    top: 50%;
+    margin-top: -210px;
+    right: 3%;
+    box-sizing: border-box;
+    background-color: rgba(242, 242, 242, 0.8);
+}
+
+.system-logo {
+    width: 68px;
+    height: 68px;
+    margin-right: 15px;
+}
+
+.system-logo-title {
+    float: right;
+    width: 252px;
+    text-align: left;
+}
+
+.u-key-box {
+    color: #999;
+    margin-bottom: 0px;
+    text-align: right;
+    display: none;
+}
+
+.u-key-box .get-u-key {
+    display: none;
+}
+
+.remember-password {
+    margin-bottom: 20px;
+}
+
+.other-login-box {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.ding-ding-scan-code-box {
+    display: none;
+    padding: 0 20px 20px 20px;
+    margin-top: 20px;
+}
+
+.ding-ding-scan-code-box .code-box {
+    background-color: #FFFFFF;
+    text-align: center;
+}
+
+.ding-ding-scan-code-box .code-box .cancel-ding-ding-scan-code-btn {
+    display: block;
+    padding-bottom: 15px;
+}
+
+@media screen and (max-width: 1920px) {
+    .layadmin-user-login-main {
+        right: 6%;
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    .layadmin-user-login-main {
+        right: 12%;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .layadmin-user-login-main {
+        left: 50%;
+        margin-left: -188px;
+    }
+}
+
+
+
