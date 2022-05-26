@@ -23,14 +23,16 @@ server:
 #  pool-queue-init: 10
 
 spring:
+  profiles:
+    active: dev
   login-url: /oauth/login
   login-failure: /oauth/login?error
   login-process: /userlogin
-  assets-matchers: /assets/**
+  assets-matchers: /assets/**,route/forum-user/register
   access-control:
     role-permission: false
   thymeleaf:
-    prefix: classpath:/templates/
+    prefix: classpath:/  /
     suffix: .html
     mode: HTML5
     encoding: UTF-8
