@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.forum.dao.forumrelease.IForumReleaseDao">
+
+    <resultMap id="forumReleaseDTO" type="com.cm.forum.pojo.dtos.forumrelease.ForumReleaseDTO">
+        <result column="forum_release_id" property="forumReleaseId"/>
+        <result column="release_title" property="releaseTitle"/>
+        <result column="release_content" property="releaseContent"/>
+        <result column="release_cover_photo" property="releaseCoverPhoto"/>
+        <result column="release_introduce" property="releaseIntroduce"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_id" property="forumUserId"/>
+        <result column="type" property="type"/>
+        <result column="type_feedback" property="typeFeedback"/>
+    </resultMap>
+
+    <resultMap id="forumReleaseBO" type="com.cm.forum.pojo.bos.forumrelease.ForumReleaseBO">
+        <result column="forum_release_id" property="forumReleaseId"/>
+        <result column="release_title" property="releaseTitle"/>
+        <result column="release_content" property="releaseContent"/>
+        <result column="release_cover_photo" property="releaseCoverPhoto"/>
+        <result column="release_introduce" property="releaseIntroduce"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_id" property="forumUserId"/>
+    </resultMap>
+
+    <resultMap id="forumReleasePO" type="com.cm.forum.pojo.pos.forumrelease.ForumReleasePO">
+        <result column="forum_release_id" property="forumReleaseId"/>
+        <result column="release_title" property="releaseTitle"/>
+        <result column="release_content" property="releaseContent"/>
+        <result column="release_cover_photo" property="releaseCoverPhoto"/>
+        <result column="release_introduce" property="releaseIntroduce"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_id" property="forumUserId"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="save" parameterType="map">
+        INSERT INTO sys_forum_release(
+            forum_release_id,
+            release_title,
+            release_content,
+            release_cover_photo,
+            release_introduce,
+            creator,
+            gmt_create,
+            modifier,
+            gmt_modified,
+            is_delete,
+            forum_user_id,
+            type
+        ) VALUES(
+            #{forumReleaseId},
+            #{releaseTitle},
+            #{releaseContent},
+            #{releaseCoverPhoto},
+            #{releaseIntroduce},
+            #{creator},
+            #{gmtCreate},
+            #{modifier},
+            #{gmtModified},
+            #{isDelete},
+            #{forumUserId},
+            #{type}
+        )
+    </insert>
+
+    <!-- 草稿 -->
+    <insert id="draft" parameterType="map">
+        INSERT INTO sys_forum_release_draft(
+            forum_release_id,
+            release_title,
+            release_content,
+            release_cover_photo,
+            release_introduce,
+            creator,
+            gmt_create,
+            modifier,
+            gmt_modified,
+            is_delete,
+            forum_user_id
+        ) VALUES(
+            #{forumReleaseId},
+            #{releaseTitle},
+            #{releaseContent},
+            #{releaseCoverPhoto},
+            #{releaseIntroduce},
+            #{creator},
+            #{gmtCreate},
+            #{modifier},
+            #{gmtModified},
+            #{isDelete},
+            #{forumUserId}
+        )
+    </insert>
+
+    <!-- 收藏 -->
+    <insert id="collection" parameterType="map">
+        INSERT INTO sys_forum_release_collection(
+            forum_release_id,
+            release_title,
+            release_content,
+            release_cover_photo,
+            release_introduce,
+            creator,
+            gmt_create,
+            modifier,
+            gmt_modified,
+            is_delete,
+            forum_user_id,
+            collectionId
+        ) VALUES(
+            #{forumReleaseId},
+            #{releaseTitle},
+            #{releaseContent},
+            #{releaseCoverPhoto},
+            #{releaseIntroduce},
+            #{creator},
+            #{gmtCreate},
+            #{modifier},
+            #{gmtModified},
+            #{isDelete},
+            #{forumUserId},
+            #{collectionId}
+        )
+    </insert>
+
+    <!-- 删除 -->
+    <update id="remove" parameterType="map">
+        UPDATE
+            sys_forum_release
+        SET
+            gmt_modified = #{gmtModified},
+            modifier = #{modifier},
+            is_delete = 1
+        WHERE
+            <!-- 添加条件 -->
+    </update>
+
+    <!-- 审核 -->
+    <update id="about" parameterType="map">
+        UPDATE
+          sys_forum_release
+        SET
+          type = #{type},
+          type_feedback = #{feedback}
+        WHERE
+        forum_release_id IN
+        <foreach collection="forumReleaseIds" index="index" open="(" separator="," close=")">
+            #{forumReleaseIds[${index}]}
+        </foreach>
+    </update>
+
+    <!-- 删除（物理） -->
+    <update id="delete" parameterType="map">
+        DELETE FROM
+            sys_forum_release
+        WHERE
+            <!-- 添加条件 -->
+    </update>
+
+    <!-- 删除个人发布内容 -->
+    <update id="removes" parameterType="map">
+        DELETE FROM
+        sys_forum_release
+        WHERE
+        forum_release_id = #{ids}
+        <!-- 添加条件 -->
+    </update>
+
+    <!-- 删除个人草稿内容 -->
+    <update id="draftRemoves" parameterType="map">
+        DELETE FROM
+        sys_forum_release_draft
+        WHERE
+        forum_release_id = #{ids}
+        <!-- 添加条件 -->
+    </update>
+
+    <!-- 取消收藏 -->
+    <update id="cancelCollection" parameterType="map">
+        DELETE FROM
+        sys_forum_release_collection
+        WHERE
+        <!-- 添加条件 -->
+        forum_release_id = #{forumReleaseId}
+        and
+        collectionId = #{forumUserId}
+    </update>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="map">
+        UPDATE
+            sys_forum_release
+        SET
+        <if test="forumReleaseId != null and forumReleaseId != ''">
+            forum_release_id = #{forumReleaseId},
+        </if>
+        <if test="releaseTitle != null and releaseTitle != ''">
+            release_title = #{releaseTitle},
+        </if>
+        <if test="releaseContent != null and releaseContent != ''">
+            release_content = #{releaseContent},
+        </if>
+        <if test="releaseCoverPhoto != null and releaseCoverPhoto != ''">
+            release_cover_photo = #{releaseCoverPhoto},
+        </if>
+        <if test="releaseIntroduce != null and releaseIntroduce != ''">
+            release_introduce = #{releaseIntroduce},
+        </if>
+        <if test="forumUserId != null and forumUserId != ''">
+            forum_user_id = #{forumUserId},
+        </if>
+            gmt_modified = #{gmtModified},
+            modifier = #{modifier},
+            <!-- 填充条件 -->
+        WHERE
+            <!-- 添加条件 -->
+    </update>
+
+    <!-- 详情 -->
+    <select id="get" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        t1.type,
+        t1.type_feedback
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.forum_release_id = #{forumReleaseId}
+            <!-- 添加条件 -->
+    </select>
+
+    <!-- 详情 -->
+    <select id="getBO" parameterType="map" resultMap="forumReleaseBO">
+        SELECT
+            t1.forum_release_id,
+            t1.release_title,
+            t1.release_content,
+            t1.release_cover_photo,
+            t1.release_introduce,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_id
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0
+            <!-- 添加条件 -->
+    </select>
+
+    <!-- 详情 -->
+    <select id="getPO" parameterType="map" resultMap="forumReleasePO">
+        SELECT
+            t1.forum_release_id,
+            t1.release_title,
+            t1.release_content,
+            t1.release_cover_photo,
+            t1.release_introduce,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_id
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0
+            <!-- 添加条件 -->
+    </select>
+
+    <!-- 列表 -->
+    <select id="myList" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        t1.type,
+        t1.type_feedback,
+        (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+        sys_forum_release t1
+        WHERE
+        t1.forum_user_id = #{forumUserId} and t1.type = #{type}
+
+    </select>
+
+    <!-- 查询自己的草稿 -->
+    <select id="myDraft" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+        sys_forum_release_draft t1
+        WHERE
+        t1.forum_user_id = #{forumUserId}
+
+    </select>
+
+    <!--查询自己的收藏-->
+    <select id="myCollection" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        t1.collectionId,
+        (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+        sys_forum_release_collection t1
+        WHERE
+        t1.collectionId = #{forumUserId}
+    </select>
+
+    <!--查询自己是否收藏-->
+    <select id="myCollectionYN" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        t1.collectionId,
+        (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+        sys_forum_release_collection t1
+        WHERE
+        t1.collectionId = #{forumUserId} and t1.forum_release_id = #{forumReleaseId}
+    </select>
+
+    <!-- 列表 -->
+    <select id="list" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+            t1.forum_release_id,
+            t1.release_title,
+            t1.release_content,
+            t1.release_cover_photo,
+            t1.release_introduce,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_id,
+            t1.type,
+            t1.type_feedback,
+            (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0 and t1.type = 1
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.release_title LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="userId != null and userId != ''">
+            AND
+            t1.forum_user_id = #{userId}
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="adminList" parameterType="map" resultMap="forumReleaseDTO">
+        SELECT
+        t1.forum_release_id,
+        t1.release_title,
+        t1.release_content,
+        t1.release_cover_photo,
+        t1.release_introduce,
+        t1.creator,
+        t1.gmt_create,
+        t1.modifier,
+        t1.gmt_modified,
+        t1.is_delete,
+        t1.forum_user_id,
+        t1.type,
+        t1.type_feedback,
+        (SELECT forum_user_name FROM sys_forum_user t2 WHERE t1.forum_user_id = t2.forum_user_id) As userName
+        FROM
+        sys_forum_release t1
+        WHERE
+        t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+            AND (
+            <!-- 这里添加其他条件 -->
+            t1.release_title LIKE CONCAT('%', #{keywords}, '%')
+            )
+        </if>
+        <if test="userId != null and userId != ''">
+            AND
+            t1.forum_user_id = #{userId}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="listBO" parameterType="map" resultMap="forumReleaseBO">
+        SELECT
+            t1.forum_release_id,
+            t1.release_title,
+            t1.release_content,
+            t1.release_cover_photo,
+            t1.release_introduce,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_id
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.id LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="listPO" parameterType="map" resultMap="forumReleasePO">
+        SELECT
+            t1.forum_release_id,
+            t1.release_title,
+            t1.release_content,
+            t1.release_cover_photo,
+            t1.release_introduce,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_id
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.id LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+    </select>
+
+    <!-- 统计  -->
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            sys_forum_release t1
+        WHERE
+            t1.is_delete = 0
+    </select>
+
+</mapper>

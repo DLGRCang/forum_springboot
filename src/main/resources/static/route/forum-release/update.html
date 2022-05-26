@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <base href="/forum/">
+    <meta charset="utf-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="assets/fonts/font-awesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="assets/layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="assets/layuiadmin/style/admin.css" media="all">
+</head>
+<body>
+<div class="layui-fluid layui-anim layui-anim-fadein">
+    <div class="layui-card">
+        <div class="layui-card-header">
+            <span class="layui-breadcrumb" lay-filter="breadcrumb" style="visibility: visible;">
+              <a class="close" href="javascript:void(0);">上级列表</a><span lay-separator="">/</span>
+              <a href="javascript:void(0);"><cite>编辑内容</cite></a>
+            </span>
+        </div>
+        <div class="layui-card-body" style="padding: 15px;">
+            <form class="layui-form layui-form-pane" lay-filter="dataForm">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <input type="text" id="releaseId" name="releaseId" class="layui-input" value="" placeholder="请输入"  maxlength="36">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">标题</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="releaseTitle" name="releaseTitle" class="layui-input" value="" placeholder="请输入标题"  maxlength="255">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label layui-form">内容</label>
+                    <div class="layui-input-block">
+                        <div id="releaseContent"></div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">封面图</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="releaseCoverPhoto" name="releaseCoverPhoto" class="layui-input" value="" placeholder="请输入封面图"  maxlength="36">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">简介</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="releaseIntroduce" name="releaseIntroduce" class="layui-input" value="" placeholder="请输入简介"  maxlength="255">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">个人id</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="forumUserId" name="forumUserId" class="layui-input" value="" placeholder="请输入个人id"  maxlength="36">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-layout-admin">
+                    <div class="layui-input-block">
+                        <div class="layui-footer" style="left: 0;">
+                            <button type="button" class="layui-btn" lay-submit lay-filter="submitForm">提交编辑</button>
+                            <button type="button" class="layui-btn layui-btn-primary close">返回上级</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="assets/js/vendor/wangEditor/wangEditor.min.js"></script>
+<script src="assets/layuiadmin/layui/layui.js"></script>
+<script>
+    layui.config({
+        base: 'assets/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['index', 'form', 'laydate', 'laytpl'], function(){
+        var $ = layui.$;
+        var form = layui.form;
+        var laytpl = layui.laytpl;
+        var laydate = layui.laydate;
+        var forumReleaseId = top.restAjax.params(window.location.href).forumReleaseId;
+
+        var wangEditor = window.wangEditor;
+        var wangEditorObj = {};
+
+        function closeBox() {
+            parent.layer.close(parent.layer.getFrameIndex(window.name));
+        }
+
+
+
+        // 初始化内容富文本
+        function initReleaseContentRichText(value) {
+            var editor = new wangEditor('#releaseContent');
+            editor.customConfig.zIndex = 1000;
+            editor.customConfig.uploadImgMaxSize = 5 * 1024 * 1024;
+            editor.customConfig.uploadImgMaxLength = 1;
+            editor.customConfig.uploadFileName = 'image';
+            editor.customConfig.uploadImgServer = 'api/file/wangeditorimage';
+            editor.customConfig.uploadImgHooks = {
+                fail: function (xhr, editor, result) {
+                    top.dialog.msg('系统错误，图片上传失败');
+                },
+                error: function (xhr, editor) {
+                    top.dialog.msg('网络异常');
+                },
+                timeout: function (xhr, editor) {
+                    top.dialog.msg('网络请求超时');
+                }
+            };
+            editor.create();
+            editor.txt.html(value);
+            wangEditorObj['releaseContent'] = editor;
+        }
+
+
+        // 初始化内容
+        function initData() {
+            var loadLayerIndex;
+            top.restAjax.get(top.restAjax.path('api/forum-release/get/{forumReleaseId}', [forumReleaseId]), {}, null, function(code, data) {
+                var dataFormData = {};
+                for(var i in data) {
+                    dataFormData[i] = data[i] +'';
+                }
+                form.val('dataForm', dataFormData);
+                form.render(null, 'dataForm');
+                initReleaseContentRichText(data['releaseContent']);
+            }, function(code, data) {
+                top.dialog.msg(data.msg);
+            }, function() {
+                loadLayerIndex = top.dialog.msg(top.dataMessage.loading, {icon: 16, time: 0, shade: 0.3});
+            }, function() {
+                top.dialog.close(loadLayerIndex);
+            });
+        }
+        initData();
+        
+        // 提交表单
+        form.on('submit(submitForm)', function(formData) {
+            top.dialog.confirm(top.dataMessage.commit, function(index) {
+                top.dialog.close(index);
+                var loadLayerIndex;
+                formData.field['releaseContent'] = wangEditorObj['releaseContent'].txt.html();
+                top.restAjax.put(top.restAjax.path('api/forum-release/update/{forumReleaseId}', [forumReleaseId]), formData.field, null, function(code, data) {
+                    var layerIndex = top.dialog.msg(top.dataMessage.updateSuccess, {
+                        time: 0,
+                        btn: [top.dataMessage.button.yes, top.dataMessage.button.no],
+                        shade: 0.3,
+                        yes: function(index) {
+                            top.dialog.close(index);
+                            window.location.reload();
+                        },
+                        btn2: function() {
+                            closeBox();
+                        }
+                    });
+                }, function(code, data) {
+                    top.dialog.msg(data.msg);
+                }, function() {
+                    loadLayerIndex = top.dialog.msg(top.dataMessage.committing, {icon: 16, time: 0, shade: 0.3});
+                }, function() {
+                    top.dialog.close(loadLayerIndex);
+                });
+            });
+            return false;
+        });
+
+        $('.close').on('click', function() {
+            closeBox();
+        });
+
+        // 校验
+        form.verify({
+        });
+    });
+</script>
+</body>
+</html>

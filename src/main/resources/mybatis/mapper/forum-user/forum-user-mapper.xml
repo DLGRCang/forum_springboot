@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.forum.dao.forumuser.IForumUserDao">
+
+    <resultMap id="forumUserDTO" type="com.cm.forum.pojo.dtos.forumuser.ForumUserDTO">
+        <result column="forum_user_id" property="forumUserId"/>
+        <result column="forum_user_sex" property="forumUserSex"/>
+        <result column="forum_user_birthday" property="forumUserBirthday"/>
+        <result column="forum_user_staffid" property="forumUserStaffid"/>
+        <result column="forum_user_Induction_time" property="forumUserInductionTime"/>
+        <result column="forum_user_department" property="forumUserDepartment"/>
+        <result column="forum_user_position" property="forumUserPosition"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_avatar" property="forumUserAvatar"/>
+        <result column="forum_user_name" property="forumUserName"/>
+    </resultMap>
+
+    <resultMap id="forumUserBO" type="com.cm.forum.pojo.bos.forumuser.ForumUserBO">
+        <result column="forum_user_id" property="forumUserId"/>
+        <result column="forum_user_sex" property="forumUserSex"/>
+        <result column="forum_user_birthday" property="forumUserBirthday"/>
+        <result column="forum_user_staffid" property="forumUserStaffid"/>
+        <result column="forum_user_Induction_time" property="forumUserInductionTime"/>
+        <result column="forum_user_department" property="forumUserDepartment"/>
+        <result column="forum_user_position" property="forumUserPosition"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_avatar" property="forumUserAvatar"/>
+        <result column="forum_user_name" property="forumUserName"/>
+    </resultMap>
+
+    <resultMap id="forumUserPO" type="com.cm.forum.pojo.pos.forumuser.ForumUserPO">
+        <result column="forum_user_id" property="forumUserId"/>
+        <result column="forum_user_sex" property="forumUserSex"/>
+        <result column="forum_user_birthday" property="forumUserBirthday"/>
+        <result column="forum_user_staffid" property="forumUserStaffid"/>
+        <result column="forum_user_Induction_time" property="forumUserInductionTime"/>
+        <result column="forum_user_department" property="forumUserDepartment"/>
+        <result column="forum_user_position" property="forumUserPosition"/>
+        <result column="creator" property="creator"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="modifier" property="modifier"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_delete" property="isDelete"/>
+        <result column="forum_user_avatar" property="forumUserAvatar"/>
+        <result column="forum_user_name" property="forumUserName"/>
+    </resultMap>
+
+    <!-- 新增 -->
+    <insert id="save" parameterType="map">
+        INSERT INTO sys_forum_user(
+            forum_user_id,
+            forum_user_sex,
+            forum_user_birthday,
+            forum_user_staffid,
+            forum_user_Induction_time,
+            forum_user_department,
+            forum_user_position,
+            creator,
+            gmt_create,
+            modifier,
+            gmt_modified,
+            is_delete,
+            forum_user_avatar,
+            forum_user_name
+        ) VALUES(
+            #{forumUserId},
+            #{forumUserSex},
+            #{forumUserBirthday},
+            #{forumUserStaffid},
+            #{forumUserInductionTime},
+            #{forumUserDepartment},
+            #{forumUserPosition},
+            #{creator},
+            #{gmtCreate},
+            #{modifier},
+            #{gmtModified},
+            #{isDelete},
+            #{forumUserAvatar},
+            #{forumUserName}
+        )
+    </insert>
+
+    <!-- 删除 -->
+    <update id="remove" parameterType="map">
+        UPDATE
+            sys_forum_user
+        SET
+            gmt_modified = #{gmtModified},
+            modifier = #{modifier},
+            is_delete = 1
+        WHERE
+            forum_user_id IN
+        <foreach collection="forumUserIds" index="index" open="(" separator="," close=")">
+            #{forumUserIds[${index}]}
+        </foreach>
+    </update>
+
+    <!-- 删除（物理） -->
+    <update id="delete" parameterType="map">
+        DELETE FROM
+            sys_forum_user
+        WHERE
+            forum_user_id IN
+        <foreach collection="forumUserIds" index="index" open="(" separator="," close=")">
+            #{forumUserIds[${index}]}
+        </foreach>
+    </update>
+
+    <!-- 修改 -->
+    <update id="update" parameterType="map">
+        UPDATE
+            sys_forum_user
+        SET
+        <if test="forumUserSex != null and forumUserSex != ''">
+            forum_user_sex = #{forumUserSex},
+        </if>
+        <if test="forumUserBirthday != null and forumUserBirthday != ''">
+            forum_user_birthday = #{forumUserBirthday},
+        </if>
+        <if test="forumUserStaffid != null and forumUserStaffid != ''">
+            forum_user_staffid = #{forumUserStaffid},
+        </if>
+        <if test="forumUserInductionTime != null and forumUserInductionTime != ''">
+            forum_user_Induction_time = #{forumUserInductionTime},
+        </if>
+        <if test="forumUserDepartment != null and forumUserDepartment != ''">
+            forum_user_department = #{forumUserDepartment},
+        </if>
+        <if test="forumUserPosition != null and forumUserPosition != ''">
+            forum_user_position = #{forumUserPosition},
+        </if>
+        <if test="forumUserAvatar != null and forumUserAvatar != ''">
+            forum_user_avatar = #{forumUserAvatar},
+        </if>
+        <if test="forumUserName != null and forumUserName != ''">
+            forum_user_name = #{forumUserName},
+        </if>
+            gmt_modified = #{gmtModified},
+            modifier = #{modifier},
+            forum_user_id = forum_user_id
+        WHERE
+            forum_user_id = #{forumUserId}
+    </update>
+
+    <!-- 详情 -->
+    <select id="get" parameterType="map" resultMap="forumUserDTO">
+        SELECT
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.forum_user_avatar,
+            t1.forum_user_name,
+            t1.forum_user_id
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+            <if test="forumUserId != null and forumUserId != ''">
+        AND
+            t1.forum_user_id = #{forumUserId}
+            </if>
+    </select>
+
+    <!-- 详情 -->
+    <select id="getBO" parameterType="map" resultMap="forumUserBO">
+        SELECT
+            t1.forum_user_id,
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_avatar,
+            t1.forum_user_name
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+            <if test="forumUserId != null and forumUserId != ''">
+        AND
+            t1.forum_user_id = #{forumUserId}
+            </if>
+    </select>
+
+    <!-- 详情 -->
+    <select id="getPO" parameterType="map" resultMap="forumUserPO">
+        SELECT
+            t1.forum_user_id,
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_avatar,
+            t1.forum_user_name
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+            <if test="forumUserId != null and forumUserId != ''">
+        AND
+            t1.forum_user_id = #{forumUserId}
+            </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="list" parameterType="map" resultMap="forumUserDTO">
+        SELECT
+            t1.forum_user_id,
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_avatar,
+            t1.forum_user_name,
+            1
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.id LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="forumUserIds != null and forumUserIds.size > 0">
+        AND
+            t1.forum_user_id IN
+            <foreach collection="forumUserIds" index="index" open="(" separator="," close=")">
+                #{forumUserIds[${index}]}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="listBO" parameterType="map" resultMap="forumUserBO">
+        SELECT
+            t1.forum_user_id,
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_avatar,
+            t1.forum_user_name
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.id LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="forumUserIds != null and forumUserIds.size > 0">
+        AND
+            t1.forum_user_id IN
+            <foreach collection="forumUserIds" index="index" open="(" separator="," close=")">
+                #{forumUserIds[${index}]}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 列表 -->
+    <select id="listPO" parameterType="map" resultMap="forumUserPO">
+        SELECT
+            t1.forum_user_id,
+            t1.forum_user_sex,
+            t1.forum_user_birthday,
+            t1.forum_user_staffid,
+            t1.forum_user_Induction_time,
+            t1.forum_user_department,
+            t1.forum_user_position,
+            t1.creator,
+            t1.gmt_create,
+            t1.modifier,
+            t1.gmt_modified,
+            t1.is_delete,
+            t1.forum_user_avatar,
+            t1.forum_user_name
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+        <if test="keywords != null and keywords != ''">
+        AND (
+            <!-- 这里添加其他条件 -->
+            t1.id LIKE CONCAT('%', #{keywords}, '%')
+        )
+        </if>
+        <if test="startTime != null and startTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ >= ]]> #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+        AND
+            LEFT(t1.gmt_create, 10) <![CDATA[ <= ]]> #{endTime}
+        </if>
+        <if test="forumUserIds != null and forumUserIds.size > 0">
+        AND
+            t1.forum_user_id IN
+            <foreach collection="forumUserIds" index="index" open="(" separator="," close=")">
+                #{forumUserIds[${index}]}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 统计  -->
+    <select id="count" parameterType="map" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            sys_forum_user t1
+        WHERE
+            t1.is_delete = 0
+    </select>
+
+</mapper>
